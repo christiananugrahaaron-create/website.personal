@@ -1,0 +1,11 @@
+Jadi nanti di folder jpg lu eren, ganti itu file jpg, kayak gini contohnya
+
+ normal.jpg
+ kamis.jpg
+ jumat.jpg
+ selasa.jpg
+ senin.jpg
+ rabu.jpg
+
+....... jadi ada total 6 file di folder jpg yg harus diisi, kalau misalnya
+tidak ada file di folder jpg, maka cmn muncul pop up gui/ui error

@@ -1,0 +1,1025 @@
+/* ==========================================================================
+   XI RPL Maulid — Stylesheet (v2)
+   Perbaikan: teks hero nggak lagi hilang ketika ketiban gradient,
+   ditambah micro-interaction di tombol, kartu anggota, dan timeline jurnal.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Jost:wght@400;500;600&display=swap');
+
+:root {
+  --green-deep: #0b4433;
+  --green-mid: #146750;
+  --green-soft: #e7efe9;
+  --gold: #c9a227;
+  --gold-light: #e8c766;
+  --cream: #fbf6e9;
+  --ink: #2a2420;
+  --ink-soft: #55504a;
+  --maroon: #7a2e2e;
+
+  --radius-arch: 999px 999px 12px 12px;
+  --shadow-card: 0 10px 24px rgba(11, 68, 51, 0.12);
+  --shadow-card-hover: 0 18px 34px rgba(11, 68, 51, 0.22);
+  --container: 1080px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Latar belakang halaman: wash krem TIPIS di atas background.png, rata di
+   seluruh halaman — jadi nggak ada titik di mana teks tiba-tiba ketiban
+   area gelap/terang yang nggak terduga. */
+body {
+  margin: 0;
+  font-family: 'Jost', sans-serif;
+  color: var(--ink);
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(rgba(251, 246, 233, 0.94), rgba(251, 246, 233, 0.94)),
+    url('background.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: 'Amiri', serif;
+  color: var(--green-deep);
+  margin: 0 0 0.4em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.section-divider {
+  width: 64px;
+  height: 3px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  position: relative;
+}
+.section-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+main section h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+}
+main section > p {
+  text-align: center;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin: 10px auto 0;
+}
+
+main section {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 70px 24px 30px;
+}
+
+/* ---------------------------------- HERO --------------------------------- */
+/* Background hero DIPISAH dari background body: gradient gelap + gambar
+   nempel langsung ke elemen ini dan ikut membesar/mengecil sesuai isinya,
+   jadi selalu gelap merata dari atas sampai bawah — nggak ada lagi bagian
+   yang "mendadak terang" dan bikin teks krem jadi nggak kebaca. */
+.hero-header {
+  max-width: none;
+  margin: 0;
+  padding: 70px 24px 56px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  background-image:
+    linear-gradient(160deg, rgba(6, 41, 30, 0.93), rgba(11, 68, 51, 0.86)),
+    url('background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-header > * {
+  max-width: var(--container);
+}
+
+.hero-header {
+  justify-content: center;
+}
+
+.hero-text {
+  flex: 1.1;
+  max-width: 560px;
+  color: var(--cream);
+  animation: fade-up 0.7s ease both;
+}
+
+.hero-text .tagline {
+  font-family: 'Amiri', serif;
+  font-style: italic;
+  color: var(--gold-light);
+  font-size: 1.05rem;
+  margin: 0 0 10px;
+  animation: fade-up 0.7s ease both;
+}
+
+.hero-text h1 {
+  color: var(--cream);
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  line-height: 1.25;
+  animation: fade-up 0.7s ease 0.1s both;
+}
+
+.hero-text .description {
+  color: #f1f6f2;
+  max-width: 52ch;
+  margin-top: 16px;
+  animation: fade-up 0.7s ease 0.2s both;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  animation: fade-up 0.7s ease 0.3s both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-download {
+  position: relative;
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-weight: 500;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.25s ease;
+}
+
+/* Efek "sapuan warna" saat hover — micro-interaction, bukan cuma ganti warna */
+.btn-primary::before,
+.btn-secondary::before,
+.btn-download::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--green-deep);
+}
+.btn-primary::before {
+  background: var(--gold-light);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(201, 162, 39, 0.4);
+}
+.btn-primary:hover::before {
+  transform: translateX(0);
+}
+
+.btn-secondary {
+  border: 1.5px solid var(--gold-light);
+  color: var(--cream);
+  background: rgba(255, 255, 255, 0.04);
+}
+.btn-secondary::before {
+  background: var(--gold-light);
+}
+.btn-secondary:hover {
+  color: var(--green-deep);
+  transform: translateY(-2px);
+}
+.btn-secondary:hover::before {
+  transform: translateX(0);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-download:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.hero-image {
+  flex: 1;
+  max-width: 380px;
+}
+
+.hero-image img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-arch);
+  border: 4px solid var(--gold-light);
+  box-shadow: var(--shadow-card);
+  background: linear-gradient(160deg, var(--green-mid), var(--green-deep));
+}
+
+/* ------------------------------- ANGGOTA TIM ------------------------------ */
+
+.team-container {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 28px;
+}
+
+.team-card {
+  background: #fff;
+  border: 1px solid var(--green-soft);
+  border-radius: 16px;
+  padding: 20px 16px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.team-card:hover,
+.team-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--gold);
+}
+
+.team-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  border-radius: var(--radius-arch);
+  border: 3px solid var(--gold);
+  transition: transform 0.35s ease;
+}
+.team-card:hover img {
+  transform: scale(1.08);
+}
+
+.team-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.team-card p {
+  color: var(--maroon);
+  font-size: 0.92rem;
+  margin: 0;
+  transition: color 0.25s ease;
+}
+.team-card:hover p {
+  color: var(--green-mid);
+}
+
+
+/* ========================================================================== */
+/*                         DOKUMENTASI MAULID                                */
+/* ========================================================================== */
+
+#dokumentasi {
+  position: relative;
+}
+
+/* ----------------------------- JUDUL SECTION ----------------------------- */
+
+.section-heading {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.section-kicker {
+  display: inline-block;
+  font-family: 'Amiri', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.section-heading h2 {
+  margin-bottom: 0;
+}
+
+.section-heading > p {
+  margin-top: 14px;
+}
+
+
+/* ------------------------------- TIMELINE -------------------------------- */
+
+.maulid-timeline {
+  position: relative;
+  margin: 55px auto 0;
+  max-width: 940px;
+  padding: 10px 0 20px;
+}
+
+/* Garis timeline */
+
+.maulid-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--gold),
+    var(--green-mid),
+    var(--gold),
+    transparent
+  );
+}
+
+
+/* ---------------------------- KARTU JURNAL ------------------------------- */
+
+.journal-card {
+  position: relative;
+  width: 100%;
+  margin-bottom: 65px;
+  animation: journal-reveal 0.8s ease both;
+}
+
+.journal-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.journal-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.journal-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.journal-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.journal-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes journal-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ----------------------------- NOMOR HARI -------------------------------- */
+
+.journal-marker {
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  width: 48px;
+  height: 48px;
+  transform: translateX(-50%);
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: var(--cream);
+  border: 3px solid var(--gold);
+  box-shadow:
+    0 0 0 5px rgba(201, 162, 39, 0.15),
+    0 8px 18px rgba(11, 68, 51, 0.15);
+
+  font-family: 'Amiri', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--green-deep);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.journal-card:hover .journal-marker {
+  transform: translateX(-50%) scale(1.12) rotate(5deg);
+  box-shadow:
+    0 0 0 8px rgba(201, 162, 39, 0.12),
+    0 10px 24px rgba(11, 68, 51, 0.2);
+}
+
+
+/* --------------------------- ISI KARTU ---------------------------------- */
+
+.journal-content {
+  width: calc(50% - 50px);
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid var(--green-soft);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.journal-card:nth-child(odd) .journal-content {
+  margin-right: auto;
+}
+
+.journal-card:nth-child(even) .journal-content {
+  margin-left: auto;
+}
+
+.journal-card:hover .journal-content {
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(201, 162, 39, 0.65);
+}
+
+.journal-card:nth-child(odd):hover .journal-content {
+  transform: translateX(-5px);
+}
+
+.journal-card:nth-child(even):hover .journal-content {
+  transform: translateX(5px);
+}
+
+
+/* ----------------------------- HEADER KARTU ------------------------------ */
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(11, 68, 51, 0.08);
+}
+
+.journal-day {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 3px;
+}
+
+.journal-header h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.journal-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green-deep);
+
+  font-family: 'Amiri', serif;
+  font-size: 1.35rem;
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+.journal-card:hover .journal-icon {
+  transform: rotate(15deg) scale(1.1);
+  background: #f4e8b8;
+}
+
+
+/* ----------------------------- BODY KARTU ------------------------------- */
+
+.journal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.journal-text {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.journal-text > p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+
+/* ------------------------------- FOTO ----------------------------------- */
+
+.journal-image {
+  position: relative;
+  min-height: 245px;
+  overflow: hidden;
+  background: var(--green-deep);
+}
+
+.journal-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 245px;
+  object-fit: cover;
+
+  transition:
+    transform 0.6s ease,
+    filter 0.4s ease;
+}
+
+.journal-card:hover .journal-image img {
+  transform: scale(1.07);
+  filter: saturate(1.08);
+}
+
+.journal-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(11, 68, 51, 0.02),
+      rgba(11, 68, 51, 0.3)
+    );
+}
+
+.image-label {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+
+  padding: 5px 11px;
+  border-radius: 999px;
+
+  background: rgba(251, 246, 233, 0.92);
+  color: var(--green-deep);
+
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+
+/* ------------------------------ CATATAN --------------------------------- */
+
+.journal-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  margin-top: 18px;
+  padding: 11px 13px;
+
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+
+  background: var(--green-soft);
+
+  color: var(--green-deep);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.journal-note span:first-child {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+
+/* ----------------------------- HIGHLIGHT -------------------------------- */
+
+.journal-highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  margin-top: 18px;
+  padding: 13px 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201, 162, 39, 0.13),
+      rgba(231, 239, 233, 0.8)
+    );
+
+  border-radius: 10px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+}
+
+.journal-highlight strong {
+  color: var(--green-deep);
+  font-family: 'Amiri', serif;
+}
+
+.journal-highlight span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+
+/* ----------------------------- POLAROID --------------------------------- */
+
+.journal-polaroid {
+  padding: 10px;
+  background: #f8f3e6;
+}
+
+.journal-polaroid img {
+  min-height: 225px;
+  height: calc(100% - 20px);
+}
+
+.journal-polaroid .image-label {
+  bottom: 18px;
+}
+
+
+/* ------------------------- CAPTION FOTO --------------------------------- */
+
+.photo-caption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 18px;
+  padding: 12px 14px;
+
+  background: #faf7ee;
+  border-radius: 10px;
+
+  border: 1px dashed var(--gold);
+
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.caption-symbol {
+  color: var(--gold);
+  font-size: 1.1rem;
+}
+
+
+/* ----------------------------- FINAL CARD ------------------------------- */
+
+.final-journal {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  margin-top: 20px;
+  padding: 14px;
+
+  background: var(--green-deep);
+  border-radius: 12px;
+
+  color: var(--cream);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.final-journal::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  right: -35px;
+  top: -35px;
+
+  border: 1px solid rgba(232, 199, 102, 0.35);
+  transform: rotate(45deg);
+}
+
+.final-symbol {
+  color: var(--gold-light);
+  font-size: 1.4rem;
+}
+
+.final-journal strong {
+  display: block;
+  color: var(--gold-light);
+  font-family: 'Amiri', serif;
+  font-size: 1rem;
+}
+
+.final-journal p {
+  margin: 3px 0 0;
+  color: #edf3ef;
+  font-size: 0.78rem;
+}
+
+
+/* ========================================================================== */
+/*                      DESAIN KHUSUS TIAP HARI                             */
+/* ========================================================================== */
+
+/* KAMIS — Nuansa awal/perencanaan */
+
+.journal-kamis .journal-header {
+  background:
+    linear-gradient(
+      135deg,
+      #f8f0d7,
+      #fff
+    );
+}
+
+.journal-kamis .journal-content {
+  border-top: 4px solid var(--gold);
+}
+
+
+/* JUMAT — Nuansa hijau dan desain */
+
+.journal-jumat .journal-header {
+  background:
+    linear-gradient(
+      135deg,
+      var(--green-soft),
+      #fff
+    );
+}
+
+.journal-jumat .journal-content {
+  border-top: 4px solid var(--green-mid);
+}
+
+.journal-jumat .journal-icon {
+  background: #dcebe4;
+}
+
+
+/* SENIN — Nuansa emas / proses utama */
+
+.journal-senin .journal-header {
+  background:
+    linear-gradient(
+      135deg,
+      #fff4cc,
+      #fff
+    );
+}
+
+.journal-senin .journal-content {
+  border-top: 4px solid var(--gold-light);
+}
+
+.journal-senin .journal-image {
+  background: #8a6b18;
+}
+
+
+/* SELASA — Nuansa album foto */
+
+.journal-selasa .journal-header {
+  background:
+    linear-gradient(
+      135deg,
+      #f0ece1,
+      #fff
+    );
+}
+
+.journal-selasa .journal-content {
+  border-top: 4px solid #a08b55;
+}
+
+.journal-selasa .journal-image {
+  background: #29251e;
+}
+
+
+/* RABU — Nuansa penutup / presentasi */
+
+.journal-rabu .journal-header {
+  background:
+    linear-gradient(
+      135deg,
+      var(--green-deep),
+      var(--green-mid)
+    );
+}
+
+.journal-rabu .journal-header h3,
+.journal-rabu .journal-day {
+  color: var(--cream);
+}
+
+.journal-rabu .journal-day {
+  color: var(--gold-light);
+}
+
+.journal-rabu .journal-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--gold-light);
+}
+
+.journal-rabu .journal-content {
+  border-top: 4px solid var(--gold);
+}
+
+
+/* ========================================================================== */
+/*                              RESPONSIVE                                   */
+/* ========================================================================== */
+
+@media (max-width: 760px) {
+
+  .maulid-timeline {
+    margin-top: 40px;
+    padding-left: 28px;
+  }
+
+  .maulid-timeline::before {
+    left: 8px;
+    transform: none;
+  }
+
+  .journal-card {
+    margin-bottom: 45px;
+  }
+
+  .journal-marker {
+    left: 8px;
+    width: 38px;
+    height: 38px;
+    transform: translateX(-50%);
+    font-size: 1rem;
+  }
+
+  .journal-card:hover .journal-marker {
+    transform: translateX(-50%) scale(1.08);
+  }
+
+  .journal-content,
+  .journal-card:nth-child(odd) .journal-content,
+  .journal-card:nth-child(even) .journal-content {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .journal-card:nth-child(odd):hover .journal-content,
+  .journal-card:nth-child(even):hover .journal-content {
+    transform: translateX(3px);
+  }
+
+  .journal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .reverse-mobile {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reverse-mobile .journal-text {
+    order: 2;
+  }
+
+  .reverse-mobile .journal-image {
+    order: 1;
+  }
+
+  .journal-image,
+  .journal-image img {
+    min-height: 220px;
+  }
+
+  .journal-header {
+    padding: 17px 18px 14px;
+  }
+
+  .journal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .journal-text {
+    padding: 19px;
+  }
+}
+
+
+/* ========================================================================== */
+/*                         REDUCED MOTION                                    */
+/* ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .journal-card {
+    animation: none;
+  }
+
+  .journal-card:hover .journal-content,
+  .journal-card:hover .journal-marker,
+  .journal-card:hover .journal-image img,
+  .journal-card:hover .journal-icon {
+    transform: none;
+  }
+}
+
+
+
+/* ---------------------------------- RESPONSIVE ------------------------------ */
+
+@media (max-width: 760px) {
+  .hero-header {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 48px;
+  }
+  .hero-buttons {
+    justify-content: center;
+  }
+  .hero-text .description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .doc-list {
+    padding-left: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  .hero-text,
+  .hero-text .tagline,
+  .hero-text h1,
+  .hero-text .description,
+  .hero-buttons {
+    opacity: 1;
+    transform: none;
+  }
+}
